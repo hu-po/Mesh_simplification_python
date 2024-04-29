@@ -1,16 +1,17 @@
 import os
 from class_mesh_simplify import mesh_simplify
 
-SIMPLIFICATION_RATIO: float = 0.5
+SIMPLIFICATION_RATIO: float = 0.2
 THRESHOLD: float = 0
 INPUT_STOMPY_FILEPATH: str = "./stompy"
-OUTPUT_STOMPY_FILEPATH: str = "./stompy_simplified"
+OUTPUT_STOMPY_FILEPATH: str = "./stompy_tiny"
 os.makedirs(OUTPUT_STOMPY_FILEPATH, exist_ok=True)
 # Copy the .urdf file to the output directory
 os.system(f"cp {INPUT_STOMPY_FILEPATH}/*.urdf {OUTPUT_STOMPY_FILEPATH}")
 output_path = os.path.join(OUTPUT_STOMPY_FILEPATH, "meshes")
 os.makedirs(output_path, exist_ok=True)
 input_path = os.path.join(INPUT_STOMPY_FILEPATH, "meshes")
+failed_meshes = []
 for filename in os.listdir(input_path):
     if filename.endswith(".obj"):
         input_filepath = os.path.join(input_path, filename)
@@ -25,6 +26,8 @@ for filename in os.listdir(input_path):
             model.output(output_filepath)
         except Exception as e:
             print(f"Error simplifying {filename}: {e}")
+            failed_meshes.append(filename)
+            os.system(f"cp {input_filepath} {output_filepath}")
             continue
         simplified_size = os.path.getsize(output_filepath)
         size_reduction = original_size - simplified_size
@@ -35,3 +38,7 @@ for filename in os.listdir(input_path):
         print(f"Reduction: {size_reduction} bytes ({reduction_percentage:.2f}%)")
 
 print("Mesh simplification complete.")
+if failed_meshes:
+    print("The following meshes failed to simplify:")
+    for mesh in failed_meshes:
+        print(mesh)
