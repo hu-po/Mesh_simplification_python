@@ -1,10 +1,10 @@
 import os
 from class_mesh_simplify import mesh_simplify
 
-SIMPLIFICATION_RATIO: float = 0.2
+SIMPLIFICATION_RATIO: float = 0.3
 THRESHOLD: float = 0
-INPUT_STOMPY_FILEPATH: str = "./stompy"
-OUTPUT_STOMPY_FILEPATH: str = "./stompy_tiny"
+INPUT_STOMPY_FILEPATH: str = "./stompy_simple_2"
+OUTPUT_STOMPY_FILEPATH: str = "./stompy_tiny_2"
 os.makedirs(OUTPUT_STOMPY_FILEPATH, exist_ok=True)
 # Copy the .urdf file to the output directory
 os.system(f"cp {INPUT_STOMPY_FILEPATH}/*.urdf {OUTPUT_STOMPY_FILEPATH}")
